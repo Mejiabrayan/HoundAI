@@ -1,0 +1,43 @@
+---
+import '../styles/app.css';
+
+import { ViewTransitions } from 'astro:transitions';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<html lang='en' class='h-full'>
+  <head>
+    <meta charset='utf-8' />
+    <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta name='generator' content={Astro.generator} />
+    <meta
+      name='description'
+      content='Hound AI blog covers the latest in tech, large language models (LLMs), and the future of open-source software.'
+    />
+    <meta name='author' content='Brayan M. Cuenca' />
+    <meta
+      name='keywords'
+      content='Hound AI, tech blog, LLMs, large language models, open source software, future tech'
+    />
+    <title>{title} | Hound AI</title>
+    <ViewTransitions />
+  </head>
+  <body class='h-full bg-white'>
+    <div class='container mx-auto'>
+      <main class='mt-8'>
+        <slot />
+        <footer class='text-black py-6'>
+          <div class='container mx-auto px-4 text-center'>
+            <p class='text-sm'>&copy; 2024 Hound AI. All rights reserved.</p>
+          </div>
+        </footer>
+      </main>
+    </div>
+  </body>
+</html>

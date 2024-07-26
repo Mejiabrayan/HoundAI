@@ -1,0 +1,64 @@
+---
+import { Image } from 'astro:assets';
+import '../styles/app.css';
+
+import Nav from '../components/nav.astro';
+
+const { frontmatter } = Astro.props;
+---
+
+<html lang='en' class='bg-white h-full'>
+  <head>
+    <title>{frontmatter.title}</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta
+      name='description'
+      content='Hound AI blog covers the latest in tech, large language models (LLMs), and the future of open-source software.'
+    />
+    <meta name='author' content='Brayan M. Cuenca' />
+    <meta property='og:title' content={frontmatter.title} />
+    <meta
+      property='og:description'
+      content={frontmatter.description ||
+        "Brayan's personal blog and portfolio website. I write about web development, design, and other topics."}
+    />
+
+    <meta
+      property='og:image'
+      content={frontmatter.image || '/src/assets/cover.jpeg'}
+    />
+  </head>
+
+  <body class='bg-white text-gray-900 h-full overflow-hidden'>
+    <div class='h-full relative'>
+      <main class='h-full flex'>
+        <Nav />
+        <div class='w-full lg:w-1/2 p-12 relative overflow-y-auto'>
+          <h1 class='text-5xl font-serif font-light mb-6 mt-16 text-balance'>
+            {frontmatter.title}
+          </h1>
+
+          <p class='text-sm text-gray-500 mb-2'>
+            By {frontmatter.author} on {frontmatter.date}
+          </p>
+          <div class='mt-8'>
+            <p class='text-sm text-gray-500 mb-8'>{frontmatter.description}</p>
+            <div class='prose max-w-none text-sm leading-relaxed'>
+              <slot />
+            </div>
+          </div>
+        </div>
+        <div class='hidden lg:block absolute top-0 right-0 w-1/2 h-full'>
+          <Image
+            src={frontmatter.image}
+            alt={frontmatter.title}
+            class='w-full h-full object-cover'
+            format='webp'
+            width={1920}
+            height={1080}
+          />
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

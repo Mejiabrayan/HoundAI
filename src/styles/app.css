@@ -1,0 +1,49 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-family-display: 'Inter', sans-serif;
+  --typography-body-leading: 1.7;
+  --typography-h1-font-size: 2.5rem;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  list-style-type: none;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+.overflow-y-auto {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+}
+
+.overflow-y-auto::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Webkit browsers */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.animate-fade-in-delayed {
+  animation: fadeIn 0.8s ease-out 0.2s forwards;
+  opacity: 0;
+}
