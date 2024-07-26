@@ -1,6 +1,6 @@
 ---
 title: 'Revolutionizing Healthcare: Latest Advancements in LLMs and Their Impact on the Medical Field'
-layout: ./src/layouts/blog-layout.astro
+layout: /src/layouts/blog-layout.astro
 author: Brayan Mejia Cuenca
 description: 'Exploring the latest advancements in large language models (LLMs) and their transformative impact on the medical field, enhancing diagnostics, treatment, and patient care.'
 date: 25 July 2024
