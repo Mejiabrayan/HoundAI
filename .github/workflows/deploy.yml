@@ -21,11 +21,17 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
 
+      - name: Clean build directory
+        run: rm -rf dist
+
       - name: Install dependencies
         run: pnpm install
 
       - name: Build project
-        run: pnpm run build
+        run: pnpm run build --verbose
+
+      - name: List dist directory contents
+        run: ls -al dist
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/pages-action@v1

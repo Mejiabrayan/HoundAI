@@ -10,12 +10,12 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/check": "^0.8.2",
+    "@astrojs/check": "^0.8.3",
     "@astrojs/cloudflare": "^11.0.1",
     "@tailwindcss/cli": "4.0.0-alpha.18",
     "astro": "^4.12.2",
     "sharp": "^0.33.4",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "4.0.0-alpha.18",
