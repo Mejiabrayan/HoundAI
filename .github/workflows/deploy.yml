@@ -1,9 +1,9 @@
-name: Deploy Astro Project
+name: Deploy Astro Project to Cloudflare Pages
 
 on:
   push:
     branches:
-      - main  # Trigger deployment on pushes to the main branch
+      - main  
 
 jobs:
   build-and-deploy:
@@ -16,27 +16,18 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'  # Specify the Node.js version
+          node-version: '18'  
 
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
 
       - name: Build project
-        run: npm run build
+        run: pnpm run build
 
-      - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v20
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
         with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          working-directory: ./
-
-      # Uncomment the following block if deploying to Netlify
-      # - name: Deploy to Netlify
-      #   uses: netlify/actions/cli@v3
-      #   with:
-      #     args: deploy --prod --dir=dist
-      #   env:
-      #     NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-      #     NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
+          directory: 'dist'
