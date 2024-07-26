@@ -3,7 +3,7 @@ name: Deploy Astro Project to Cloudflare Pages
 on:
   push:
     branches:
-      - main  # Trigger deployment on pushes to the main branch
+      - main  
 
 jobs:
   build-and-deploy:
@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'  # Specify the Node.js version
+          node-version: '20'
 
       - name: Install pnpm
         run: npm install -g pnpm
