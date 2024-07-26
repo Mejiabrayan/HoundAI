@@ -4,7 +4,7 @@ layout: /src/layouts/blog-layout.astro
 author: Brayan Mejia Cuenca
 description: 'Exploring the rise of open source large language models (LLMs) and how they are empowering developers with powerful AI capabilities.'
 date: 25 July 2024
-image: '/src/assets/ai-advancement.jpg'
+image: /src/assets/ai-advancement.jpg
 ---
 
 # The Advancement of Open Source LLMs and Their Benefits for Developers
