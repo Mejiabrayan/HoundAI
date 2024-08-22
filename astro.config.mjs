@@ -30,6 +30,6 @@ export default defineConfig({
       transformers: [],
     },
   },
-  integrations: [db(), react()],
+  integrations: [react()],
   
 });
