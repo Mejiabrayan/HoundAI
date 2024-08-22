@@ -4,6 +4,11 @@ import { Image } from 'astro:assets';
 import logo from '../assets/hound2.svg';
 
 import Search from '../components/searchbar.astro';
+
+import { GET } from './api/search.ts'
+
+let response = await GET(Astro)
+const data = await response.json()
 ---
 
 <Layout title='HoundAI - Exploring Tech and AI'>
@@ -28,6 +33,13 @@ import Search from '../components/searchbar.astro';
           >
             Articles
           </a>
+        <li>
+          <a
+            href='#articles'
+            class='text-gray-600 hover:text-gray-900 transition duration-300 ease-in-out'
+          >
+         {data.greeting}
+          </a>
         </li>
       </ul>
     </nav>
@@ -38,7 +50,8 @@ import Search from '../components/searchbar.astro';
       try {
         const apiKey = import.meta.env.PUBLIC_API_KEY;
         const response = await fetch(
-          `https://api.core.ac.uk/v3/search/works?q=latest&apiKey=${apiKey}&limit=5&sort=publishedDate`
+          `https://api.core.ac.uk/v3/search/works?q=latest&apiKey=${apiKey}&limit=5&sort=publishedDate`,
+          
         );
 
         if (!response.ok) {
