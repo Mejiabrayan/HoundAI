@@ -1,65 +1,142 @@
 ---
-
 ---
 
-<form id='search-form' class='flex justify-center items-center space-x-2 p-4'>
-  <input
-    id='search-input'
-    type='search'
-    placeholder='Search for scholarly articles...'
-    class='border border-gray-300 rounded-full py-2 px-4 w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out'
-  />
-  <button
-    type='submit'
-    class='rounded-full py-2 px-6 bg-blue-600 text-white hover:bg-blue-700 transition duration-300 ease-in-out'
-    >Search</button
-  >
-</form>
+<div class="relative max-w-xl mx-auto">
+  <form id='search-form' class='flex justify-center items-center space-x-2 p-4'>
+    <div class="relative flex-grow">
+      <input
+        id='search-input'
+        type='search'
+        placeholder='search articles...'
+        class='w-full border border-gray-300 rounded-full py-2 px-4 pl-10 pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out'
+      />
+      <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+        <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+        </svg>
+      </span>
+      <button
+        type='submit'
+        class='absolute inset-y-0 right-0 flex items-center px-3 rounded-r-full bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-300 ease-in-out'
+      >
+        Search
+      </button>
+    </div>
+  </form>
+</div>
 
-<div id='search-results' class='p-4'></div>
+<div id="search-suggestions" class="absolute z-10 w-full max-w-xl mx-auto mt-1 bg-white border border-gray-300 rounded-md shadow-lg hidden"></div>
+
+<div id='search-results' class='p-4 max-w-4xl mx-auto'></div>
 
 <script>
+  const searchForm = document.getElementById('search-form') as HTMLFormElement;
+  const searchInput = document.getElementById('search-input') as HTMLInputElement;
+  const searchSuggestions = document.getElementById('search-suggestions') as HTMLDivElement;
+  const searchResults = document.getElementById('search-results') as HTMLDivElement;
+
+  let debounceTimer: number;
+
+  async function fetchSuggestions(query: string): Promise<void> {
+    if (query.length < 3) {
+      searchSuggestions.innerHTML = '';
+      searchSuggestions.classList.add('hidden');
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/suggestions?q=${encodeURIComponent(query)}`);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const suggestions = await response.json();
+      displaySuggestions(suggestions);
+    } catch (error) {
+      console.error('Error fetching suggestions:', error);
+    }
+  }
+
+  function displaySuggestions(suggestions: string[]): void {
+    searchSuggestions.innerHTML = '';
+    if (suggestions.length === 0) {
+      searchSuggestions.classList.add('hidden');
+      return;
+    }
+
+    suggestions.forEach(suggestion => {
+      const div = document.createElement('div');
+      div.className = 'px-4 py-2 hover:bg-gray-100 cursor-pointer';
+      div.textContent = suggestion;
+      div.addEventListener('click', () => {
+        searchInput.value = suggestion;
+        searchSuggestions.classList.add('hidden');
+        fetchScholarlyArticles(suggestion);
+      });
+      searchSuggestions.appendChild(div);
+    });
+    searchSuggestions.classList.remove('hidden');
+  }
+
   async function fetchScholarlyArticles(query: string): Promise<void> {
+    searchResults.innerHTML = '<div class="text-center"><div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div></div>';
     try {
       const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const data = await response.json();
       displayResults(data.results);
     } catch (error) {
       console.error('Error fetching scholarly articles:', error);
+      searchResults.innerHTML = '<p class="text-red-500">An error occurred while fetching results. Please try again.</p>';
     }
   }
 
-
   function displayResults(articles: any[]): void {
-    const resultsContainer = document.getElementById('search-results');
-    if (!resultsContainer) return;
+    if (!searchResults) return;
 
-    resultsContainer.innerHTML = '';
+    searchResults.innerHTML = '';
+    
+    if (articles.length === 0) {
+      searchResults.innerHTML = '<p class="text-center text-gray-500">No results found. Please try a different search term.</p>';
+      return;
+    }
     
     articles.forEach(article => {
       const articleElement = document.createElement('div');
-      articleElement.className = 'mb-4 p-4 rounded';
+      articleElement.className = 'mb-6 p-4 bg-white rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300';
       articleElement.innerHTML = `
-        <h3 class="font-bold">${article.title}</h3>
-        <p class="text-sm text-gray-600">${article.authors?.map((author: any) => author.name).join(', ') || 'Unknown Author'}</p>
-        <p class="mt-2">${article.abstract || 'No abstract available'}</p>
+        <h3 class="text-xl font-medium mb-2">
+          <a href="${article.doi ? `https://doi.org/${article.doi}` : article.urls?.[0] || '#'}" target="_blank" rel="noopener noreferrer" class="text-black hover:underline">${article.title}</a>
+        </h3>
+        <p class="text-sm text-gray-600 mb-2">${article.authors?.map((author: any) => author.name).join(', ') || 'Unknown Author'}</p>
+        <p class="text-gray-700 mb-3">${article.abstract ? article.abstract.substring(0, 200) + '...' : 'No abstract available'}</p>
+        <div class="flex flex-wrap gap-2 mb-2">
+          ${article.field_of_study ? `<span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">${article.field_of_study}</span>` : ''}
+          ${article.document_type ? `<span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">${article.document_type}</span>` : ''}
+          ${article.language?.name ? `<span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded">${article.language.name}</span>` : ''}
+        </div>
+        <div class="text-sm text-gray-500">
+          ${article.published_date ? `Published: ${new Date(article.published_date).toLocaleDateString()}` : ''}
+          ${article.citation_count ? ` | Citations: ${article.citation_count}` : ''}
+        </div>
       `;
-      resultsContainer.appendChild(articleElement);
+      searchResults.appendChild(articleElement);
     });
   }
 
-  document
-    .getElementById('search-form')
-    ?.addEventListener('submit', function (event: Event) {
-      event.preventDefault();
-      const input = (
-        document.getElementById('search-input') as HTMLInputElement
-      ).value;
-      fetchScholarlyArticles(input);
-    });
+  searchInput.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    // @ts-ignore
+    debounceTimer = setTimeout(() => fetchSuggestions(searchInput.value), 300);
+  });
+
+  searchForm.addEventListener('submit', function (event: Event) {
+    event.preventDefault();
+    const input = searchInput.value;
+    searchSuggestions.classList.add('hidden');
+    fetchScholarlyArticles(input);
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!searchSuggestions.contains(event.target as Node) && event.target !== searchInput) {
+      searchSuggestions.classList.add('hidden');
+    }
+  });
 </script>
