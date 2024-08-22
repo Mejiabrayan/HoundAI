@@ -102,7 +102,7 @@
       const articleElement = document.createElement('div');
       articleElement.className = 'mb-6 p-4 bg-white rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300';
       articleElement.innerHTML = `
-        <h3 class="text-xl font-medium mb-2">
+        <h3 class="text-xl font-medium font-serif mb-2">
           <a href="${article.doi ? `https://doi.org/${article.doi}` : article.urls?.[0] || '#'}" target="_blank" rel="noopener noreferrer" class="text-black hover:underline">${article.title}</a>
         </h3>
         <p class="text-sm text-gray-600 mb-2">${article.authors?.map((author: any) => author.name).join(', ') || 'Unknown Author'}</p>
