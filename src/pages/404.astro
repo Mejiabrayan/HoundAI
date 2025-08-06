@@ -1,29 +1,27 @@
 ---
 import Layout from '../layouts/layout.astro';
 import { Image } from 'astro:assets';
-import Hound from '../assets/hound.svg';
+import Hound from '../assets/houndai2.png';
 ---
 
 <Layout title='404'>
   <header
-    class='sticky top-0 w-full z-10 bg-[radial-gradient(transparent_1px,#ffff_0.5px)] [background-size:4px_4px] backdrop-blur-sm'
-  >
-    <nav class='flex justify-between items-center py-4 px-6 max-w-6xl mx-auto'>
-      <a href='#home' class='text-2xl font-light font-serif'>HoundAI</a>
-      <ul class='flex gap-8'>
+    class="sticky top-0 w-full z-10 bg-[radial-gradient(transparent_1px,#ffff_0.5px)] bg-size-[4px_4px] backdrop-blur-sm">
+    <nav class="flex justify-between items-center py-4 px-6 max-w-6xl mx-auto">
+      <a href="#home" class="text-2xl font-light font-serif">HoundAI</a>
+      <ul class="flex gap-8">
         <li>
           <a
-            href='#home'
-            class='text-gray-600 hover:text-gray-900 transition duration-300 ease-in-out'
-          >
+            href="#home"
+            class="text-gray-600 hover:text-gray-900 transition duration-300 ease-in-out">
             Home
           </a>
         </li>
         <li>
           <a
-            href='#articles'
-            class='text-gray-600 hover:text-gray-900 transition duration-300 ease-in-out'
-          >
+            href="#articles"
+            class="text-gray-600 hover:text-gray-900 transition duration-300 ease-in-out"
+            >
             Articles
           </a>
         </li>
@@ -32,15 +30,19 @@ import Hound from '../assets/hound.svg';
   </header>
 
   <section
-    class='relative isolate flex flex-col items-center min-h-screen justify-center'
+    class="relative isolate flex flex-col items-center min-h-screen justify-center overflow-hidden"
   >
-    <Image
-      src={Hound}
-      alt='404'
-      class='w-auto h-auto'
-      format={'webp'}
-      draggable={'false'}
-    />
+    <div class="absolute inset-0 w-full h-full z-[-1] pointer-events-none select-none">
+      <Image
+        src={Hound}
+        alt="404"
+        class="w-full h-full object-contain"
+        format={'webp'}
+        draggable={'false'}
+        aria-hidden="true"
+        loading="eager"
+      />
+    </div>
     <h1 class='text-6xl font-serif'>404</h1>
     <p class='text-xl mt-4'>Page not found</p>
     <a

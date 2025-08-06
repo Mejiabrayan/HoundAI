@@ -2,12 +2,12 @@
 import Layout from '../layouts/layout.astro';
 import { Image } from 'astro:assets';
 import logo from '../assets/hound2.svg';
-import Search from '../components/searchbar.astro';
+import Search from '../components/searchbar';
 ---
 
 <Layout title='HoundAI - Exploring Tech and AI'>
   <header
-    class='sticky top-0 w-full z-10 bg-[radial-gradient(transparent_1px,#ffff_0.5px)] [background-size:4px_4px] backdrop-blur-sm'
+    class='sticky top-0 w-full z-10 bg-[radial-gradient(transparent_1px,#ffff_0.5px)] bg-size-[4px_4px] backdrop-blur-sm'
   >
     <nav class='flex justify-between items-center py-4 px-6 max-w-6xl mx-auto'>
       <a
@@ -36,7 +36,7 @@ import Search from '../components/searchbar.astro';
     </nav>
   </header>
 
-  <main class='max-w-6xl mx-auto px-4'>
+  <main class='max-w-screen mx-auto px-4'>
     <section id='home' class='text-center py-20 md:py-32'>
       <Image
         src={logo}
@@ -47,17 +47,16 @@ import Search from '../components/searchbar.astro';
         loading={'eager'}
       />
       <h1
-        class='text-4xl md:text-6xl font-light mb-6 animate-fade-in font-serif text-gray-800'
-      >
+        class='text-4xl md:text-6xl font-light mb-4 animate-fade-in font-serif text-gray-800 tracking-tight'>
         HoundAI
       </h1>
       <p
-        class='text-gray-600 text-lg md:text-xl mb-10 max-w-2xl mx-auto animate-fade-in-delayed'
+        class='text-gray-600 text-lg md:text-xl mb-10 max-w-2xl mx-auto animate-fade-in-delayed tracking-tighter'
       >
         Search and explore the latest articles on technology and AI.
       </p>
       <div class='max-w-xl mx-auto'>
-        <Search />
+        <Search client:load />
       </div>
     </section>
 
@@ -108,7 +107,7 @@ import Search from '../components/searchbar.astro';
         <h3 class="text-xl font-serif font-light mb-3 text-gray-800">
           <a href="${article.doi ? `https://doi.org/${article.doi}` : article.urls?.[0] || '#'}" target="_blank" rel="noopener noreferrer" class="hover:text-blue-600 transition duration-300">${article.title}</a>
         </h3>
-        <p class="text-gray-600 mb-4 text-sm flex-grow">${article.abstract?.substring(0, 150)}...</p>
+        <p class="text-gray-600 mb-4 text-sm grow">${article.abstract?.substring(0, 150)}...</p>
         <div class="flex flex-wrap gap-2 mb-4 font-serif">
           ${article.field_of_study ? `<span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">${article.field_of_study}</span>` : ''}
           ${article.document_type ? `<span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">${article.document_type}</span>` : ''}
