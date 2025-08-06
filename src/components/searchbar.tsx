@@ -226,7 +226,7 @@ const SearchBar: React.FC = () => {
             size="sm"
             disabled={loadingArticles}
             onClick={handleButtonClick}
-            className='bg-slate-900/1 backdrop-blur-lg ring-[0.5px] transition-colors ring-slate-900/12 hover:bg-white text-slate-500  shadow-[0_1px_1px_-0.5px,0_2px_2px_-1px,0_4px_4px_-2px,0_8px_8px_-4px] shadow-slate-900/4 inset-shadow-[0_1.5px_1px_theme(colors.white/90%),0_-1.5px_1px_theme(colors.white/80%),0_6px_6px_-3px_theme(colors.slate.900/8%),0_-4px_4px_-2px_theme(colors.slate.900/10%)]'
+            className='bg-slate-900/1 backdrop-blur-lg ring-[0.5px] transition-colors ring-slate-900/12 hover:bg-white text-slate-500 shadow-[0_1px_1px_-0.5px,0_2px_2px_-1px,0_4px_4px_-2px,0_8px_8px_-4px] shadow-slate-900/4 inset-shadow-[0_1.5px_1px_theme(colors.white/90%),0_-1.5px_1px_theme(colors.white/80%),0_6px_6px_-3px_theme(colors.slate.900/8%),0_-4px_4px_-2px_theme(colors.slate.900/10%)]'
           >
             <span className="bg-gradient-to-b from-slate-950 to-slate-500 leading-4 text-transparent bg-clip-text drop-shadow-[0_1px_0_theme(colors.white/75%),0_1px_2px_theme(colors.slate.900/25%),0_-1px_0_theme(colors.slate.900/2%)]">
               {loadingArticles ? "..." : "Search"}
