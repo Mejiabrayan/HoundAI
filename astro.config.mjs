@@ -5,7 +5,10 @@ import react from '@astrojs/react';
 
 // https://astro.build/config
 export default defineConfig({
-  adapter: cloudflare({platformProxy: true}),
+  adapter: cloudflare({
+    platformProxy: true,
+    imageService: 'cloudflare',
+  }),
   output: 'server',
   markdown: {
     shikiConfig: {
