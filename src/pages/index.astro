@@ -3,6 +3,7 @@ import Layout from '../layouts/layout.astro';
 import { Image } from 'astro:assets';
 import logo from '../assets/hound2.svg';
 import Search from '../components/searchbar';
+import ArticlesGrid from '../components/article-grid';
 ---
 
 <Layout title='HoundAI - Exploring Tech and AI'>
@@ -60,88 +61,15 @@ import Search from '../components/searchbar';
       </div>
     </section>
 
-    <section id='articles' class='py-16'>
+    <section id='articles' class='py-16 max-w-6xl mx-auto'>
       <h2 class='text-3xl font-light mb-8 font-serif text-gray-800'>
         Latest Articles
       </h2>
-      <div
-        id='latest-articles'
-        class='grid gap-8 md:grid-cols-2 lg:grid-cols-3'
-      >
-        <div class="col-span-full text-center">
-          <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
-        </div>
+      <div class='grid gap-8 md:grid-cols-2 lg:grid-cols-3'>
+        <ArticlesGrid client:load />
       </div>
     </section>
   </main>
 
-  <script>
-    async function fetchLatestArticles(): Promise<void> {
-      try {
-        const response = await fetch('/api/latestArticles');
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        displayLatestArticles(data.results);
-      } catch (error) {
-        console.error('Error fetching latest articles:', error);
-      }
-    }
-
-    function displayLatestArticles(articles: any[]): void {
-      const latestArticlesContainer =
-        document.getElementById('latest-articles');
-      if (!latestArticlesContainer) return;
-
-      latestArticlesContainer.innerHTML = '';
-
-      articles.forEach((article) => {
-        const articleElement = document.createElement('div');
-        articleElement.className =
-          'bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-lg hover:-translate-y-1';
-        articleElement.innerHTML = `
-      <div class="p-6 flex flex-col h-full">
-        <h3 class="text-xl font-serif font-light mb-3 text-gray-800">
-          <a href="${article.doi ? `https://doi.org/${article.doi}` : article.urls?.[0] || '#'}" target="_blank" rel="noopener noreferrer" class="hover:text-blue-600 transition duration-300">${article.title}</a>
-        </h3>
-        <p class="text-gray-600 mb-4 text-sm grow">${article.abstract?.substring(0, 150)}...</p>
-        <div class="flex flex-wrap gap-2 mb-4 font-serif">
-          ${article.field_of_study ? `<span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">${article.field_of_study}</span>` : ''}
-          ${article.document_type ? `<span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">${article.document_type}</span>` : ''}
-          ${article.language?.name ? `<span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded">${article.language.name}</span>` : ''}
-        </div>
-        <div class="flex flex-col text-sm text-gray-500 mt-auto">
-<span class="mb-1">${new Date(article.publishedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-          <span class="truncate">${article.authors?.map((author: any) => author.name).join(', ') || 'Unknown Author'}</span>
-          <span>${article.journals?.map((journal: any) => journal.title).join(', ') || ''}</span>
-        </div>
-        <div class="flex flex-wrap gap-2 mt-4">
-          ${article.doi ? `<a href="https://doi.org/${article.doi}" target="_blank" rel="noopener noreferrer" class="text-xs text-blue-600 hover:underline">DOI</a>` : ''}
-          ${article.download_url ? `<a href="${article.download_url}" target="_blank" rel="noopener noreferrer" class="text-xs text-blue-600 hover:underline">Download</a>` : ''}
-          ${article.citation_count ? `<span class="text-xs text-gray-500">Citations: ${article.citation_count}</span>` : ''}
-        </div>
-      </div>
-    `;
-        latestArticlesContainer.appendChild(articleElement);
-      });
-    }
-
-    document.addEventListener('DOMContentLoaded', fetchLatestArticles);
-
-    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-      anchor.addEventListener('click', function (e: Event) {
-        e.preventDefault();
-        const target = this as HTMLAnchorElement;
-        const element = document.querySelector(target.getAttribute('href')!);
-        if (element) {
-          element.scrollIntoView({
-            behavior: 'smooth',
-          });
-        }
-      } as (this: HTMLAnchorElement, e: Event) => void);
-    });
-  </script>
 </Layout>
